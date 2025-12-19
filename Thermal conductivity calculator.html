@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermal Conductivity Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: black;
+            margin-bottom: 30px;
+        }
+
+        .calculator-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .input-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 16px;
+            color: black;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            padding: 12px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .calculate-button {
+            padding: 20px 40px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 30px 0;
+            transition: background-color 0.3s;
+            width: auto;
+            min-width: 400px;
+        }
+
+        .calculate-button:hover {
+            background-color: #45a049;
+        }
+
+        #EffectiveThroughPlaneTC  {
+            font-size: 40px;
+            color: white;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            min-width: 400px;
+            display: inline-block;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .input-column {
+                width: 100%;
+            }
+            
+            .calculate-button {
+                min-width: 300px;
+                font-size: 20px;
+            }
+            
+            #EffectiveThroughPlaneTC {
+                font-size: 32px;
+                min-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Thermal Conductivity Calculator</h1>
+    
+    <div class="calculator-container">
+        <div class="input-row">
+            <!-- 第一列 -->
+            <div class="input-column">
+
+                <div class="input-group">
+                    <label for="a">Radius of filler (m):</label>
+<input  id ="a" type="text"  placeholder="input a (m)">
+<select onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="5e-8">50 nm</option>
+<option value="1e-7">100 nm</option>
+<option value="5e-7">500 nm</option>
+<option value="1e-6">1 μm</option>
+<option value="5e-6">5 μm</option>
+<option value="1e-5">10 μm</option>
+<option value="2e-5">20 μm</option>
+<option value="5e-5">50 μm</option>
+</select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="d">Thickness of filler (m):</label>
+<input id ="d" type="text" placeholder="input d (m)">
+<select onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="1e-9">1 nm</option>
+<option value="1e-8">10 nm</option>
+<option value="5e-8">50 nm</option>
+<option value="1e-7">100 nm</option>
+<option value="5e-7">500 nm</option>
+<option value="1e-6">1 μm</option>
+<option value="5e-6">5 μm</option>
+<option value="1e-5">10 μm</option>
+</select>
+                </div>
+
+                <div class="input-group">
+                    <label for="Vf">Volume fraction :</label>
+<input id ="Vf" type="text" placeholder="input Vf">
+<select onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="0.05">0.05</option>
+<option value="0.10">0.10</option>
+<option value="0.20">0.20</option>
+<option value="0.30">0.30</option>
+<option value="0.40">0.40</option>
+<option value="0.50">0.50</option>
+<option value="0.60">0.60</option>
+<option value="0.70">0.70</option>
+</select>
+                </div>                               
+            </div>
+            
+            <!-- 第二列 -->
+            <div class="input-column">
+                <div class="input-group">
+                    <label for="km">Thermal conductivity of matrix:</label>
+<input id ="km" type="text" placeholder="input km (W/m K)">
+<select onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="0.1">0.1</option>
+<option value="0.15">0.15</option>
+<option value="0.2">0.2</option>
+<option value="0.25">0.25</option>
+<option value="0.3">0.3</option>
+</select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="kf1">Thermal conductivity of filler (out of plane):</label>
+<input  id ="kf1" type="text" placeholder="input kf⊥ (W/m K)">
+<select onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="2">2</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+<option value="50">50</option>
+<option value="80">80</option>
+</select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="kf2">Thermal conductivity of filler (in plane):</label>
+<input  id ="kf2" type="text" placeholder="input kf∥ (W/m K)">
+<select  onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="50">50</option>
+<option value="100">100</option>
+<option value="150">150</option>
+<option value="200">200</option>
+<option value="250">250</option>
+<option value="300">300</option>
+</select>
+                </div>
+
+            </div>
+            
+            <!-- 第三列 -->
+            <div class="input-column">
+                <div class="input-group">
+                    <label for="Ri">Interface resistance between matrix and filler:</label>
+<input  id ="Ri" type="text" placeholder="input Ri (m² K/W)">
+<select onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="1e-9">10⁻⁹</option>
+<option value="1e-8">10⁻⁸</option>
+<option value="1e-7">10⁻⁷</option>
+<option value="1e-6">10⁻⁶</option>
+<option value="1e-5">10⁻⁵</option>
+</select>
+                </div>
+
+                <div class="input-group">
+                    <label for="Rc">Contact resistance between filler and filler:</label>
+<input  id ="Rc" type="text" placeholder="input Rc (m² K/W)">
+<select onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="1e-9">10⁻⁹</option>
+<option value="1e-8">10⁻⁸</option>
+<option value="1e-7">10⁻⁷</option>
+<option value="1e-6">10⁻⁶</option>
+<option value="1e-5">10⁻⁵</option>
+</select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="cos2A">Orientation factor:</label>
+<input  id ="cos2A" type="text"  placeholder="input cos²θ">
+<select onchange="syncSelectToInput(this)">
+<option value="">choose...</option>
+<option value="0.2">0.2</option>
+<option value="0.33">0.33</option>
+<option value="0.5">0.5</option>
+<option value="0.66">0.66</option>
+<option value="0.8">0.8</option>
+</select>
+                </div>
+            </div>
+        </div>
+        
+        <button class="calculate-button" onclick="CalculateEffectiveThermalConductivity()">
+            Calculate the effective thermal conductivity (keff)
+        </button>
+    </div>
+
+    <div id="EffectiveThroughPlaneTC"> keff:</div>
+
+  <script>
+function syncSelectToInput(sel){
+  const group = sel.closest('.input-group');
+  const input = group.querySelector('input');
+  if(input && sel.value!=="") input.value = sel.value;
+}
+
+    function CalculateEffectiveThermalConductivity() {
+const a     = parseFloat(document.getElementById("a").value);
+const d     = parseFloat(document.getElementById("d").value);
+const km    = parseFloat(document.getElementById("km").value);
+const kf1   = parseFloat(document.getElementById("kf1").value);
+const kf2   = parseFloat(document.getElementById("kf2").value);
+const Vf    = parseFloat(document.getElementById("Vf").value);
+const Ri    = parseFloat(document.getElementById("Ri").value);
+const Rc    = parseFloat(document.getElementById("Rc").value);
+const cos2A = parseFloat(document.getElementById("cos2A").value);
+
+      if ([a, d, km, kf1, kf2, Vf, Ri, Rc, cos2A].some(isNaN)) {
+        alert("请填写所有参数！");
+        return;
+      }
+
+      const threshold = d / (2 * a);
+
+      let keff1, keff2;
+
+      /* ======================== 情况 1：Vf ≤ d/2a ======================== */
+      if (Vf <= threshold) {
+        const X1 = (d + 2 * a * Vf) / (2 * Vf);
+        const Y1 = a * Math.sqrt((2 * Math.PI * a) / (2 * a * Vf + d));
+        const Z1 = d * Math.sqrt((2 * Math.PI * a) / (2 * a * Vf + d));
+
+        keff1 = km + (
+          Math.PI * a * a * km * (d * (km - kf1) + 2 * kf1 * km * Ri)
+        ) /
+        (
+          X1 * Y1 * (d * (kf1 - km) - kf1 * (2 * km * Ri + Z1))
+        );
+
+        const termA = (km * X1) / (Y1 * Z1);
+        const termB = (4 * Math.PI * a * d * (Math.PI * kf2 + (4 - Math.PI) * km));
+        const termC = 16 * Math.PI * a * km + (8 * km * Ri + Math.PI * (X1 - 2 * a)) * (Math.PI * kf2 + (4 - Math.PI) * km);
+        const termD = 1 / (((X1 - 2 * a) / (Y1 * Z1 - 4 * a * d)) + (2 * a) / (Y1 * Z1 - 2 * a * d));
+
+        keff2 = termA * (termB / termC + termD);
+
+      } else {
+        /* ======================== 情况 2：Vf > d/2a ======================== */
+        const X2 = (2 * (Math.PI * a * a - a * d - 2 * a * a * Vf)) / (Math.PI * a - 2 * d);
+        const Y2 = a * Math.sqrt(
+          (Math.PI * (Math.PI * a - 2 * d)) /
+          (2 * Vf * (Math.PI * a - 2 * a * Vf - d))
+        );
+        const Z2 = d * Math.sqrt(
+          (Math.PI * (Math.PI * a - 2 * d)) /
+          (2 * Vf * (Math.PI * a - 2 * a * Vf - d))
+        );
+
+
+        keff1 = (
+          (1 - (Math.PI * a * a) / (2 * X2 * Y2)) * km +
+          (Math.PI * a * a * Z2) /
+            (4 * X2 * Y2) *
+            (
+              (100 * Rc * (Math.PI * a - 2 * d)) / (2 * a * Vf - d) +
+              (100 * Ri * (Math.PI * a - 2 * d)) / (100 * Math.PI * a - 2 * a * Vf - 199 * d) +
+              d / kf1 +
+              (Z2 - 2 * d) / (2 * km) +
+              Ri
+            )
+        );
+
+        const termA2 = X2 / (Y2 * Z2);
+        const termB2 =
+          4 * Math.PI * a * a * d * (2 * a * Vf - d) *
+          (Math.PI * kf2 + (4 - Math.PI) * km);
+        const termC2 =
+          (4 * a * a * Vf * Ri - 200 * d * d * Rc + a * d * (100 * Math.PI * Rc - 2 * Ri)) *
+          (Math.PI * kf2 + (4 - Math.PI) * km) +
+          4 * Math.PI * a * (2 * a * Vf - d) * (3 * X2 - 2 * a);
+        const termD2 =
+          (2 * km * (Y2 * Z2 - 2 * a * d) * (Y2 * Z2 - 4 * a * d)) /
+          (X2 * Y2 * Z2 - 2 * a * d * (3 * X2 - 2 * a));
+
+        keff2 = termA2 * (termB2 / termC2 + termD2);
+      }
+
+      /* ======================== 最终有效热导率 ======================== */
+      const keff = keff1 *  cos2A+ keff2 * (1 - cos2A);
+
+
+      document.getElementById("EffectiveThroughPlaneTC").innerText = "keff: " + keff.toFixed(2)+  " W/m·K";
+    }
+  </script>
+</body>
+
+</html>
