@@ -25,8 +25,8 @@ The overall effective thermal conductivity is obtained by orientation-weighted a
 3. Input Parameters
 3.1 Filler Geometry
 Parameter	Description	Unit
-a	Radius of platelet filler	m
-d	Thickness of platelet filler	m
+a	Radius of platelet filler	(m)
+d	Thickness of platelet filler	(m)
 Both manual input and predefined typical dimensions are supported.
 
 3.2 Volume Fraction
@@ -35,14 +35,14 @@ Vf	Filler volume fraction
 
 3.3 Thermal Conductivity Parameters
 Parameter	Description	Unit
-km	Thermal conductivity of matrix	W·m⁻¹·K⁻¹
-kf⊥	Through-plane thermal conductivity of filler	W·m⁻¹·K⁻¹
-kf∥	In-plane thermal conductivity of filler	W·m⁻¹·K⁻¹
+km	Thermal conductivity of matrix	(W·m⁻¹·K⁻¹)
+kf⊥	Through-plane thermal conductivity of filler	(W·m⁻¹·K⁻¹)
+kf∥	In-plane thermal conductivity of filler	(W·m⁻¹·K⁻¹)
 
 3.4 Interfacial and Contact Thermal Resistance
 Parameter	Description	Unit
-Ri	Filler-matrix interfacial thermal resistance	m²·K·W⁻¹
-Rc	Filler-filler contact thermal resistance	m²·K·W⁻¹
+Ri	Filler-matrix interfacial thermal resistance	(m²·K·W⁻¹)
+Rc	Filler-filler contact thermal resistance	(m²·K·W⁻¹)
 Note: The interfacial thermal resistance and the filler-filler contact thermal resistance can be obtained either from experimental measurements or directly calculated using theoretical or numerical models.
 
 3.5 Orientation Factor
